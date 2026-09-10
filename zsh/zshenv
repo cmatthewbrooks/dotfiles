@@ -8,8 +8,26 @@
 # makes re-sourcing (tmux, nested shells) idempotent without any manual guard.
 typeset -U path fpath
 
+# Homebrew's prefix differs by platform: /opt/homebrew on Apple Silicon,
+# /usr/local on Intel macOS, /home/linuxbrew on Linux. Probe rather than assume.
+#
+# This must run for EVERY invocation, not just login shells. rc.d guards its
+# tool integrations on `command -v fzf` and similar, so a shell that has not
+# seen the brew prefix silently loses those features rather than erroring.
+# `typeset -U path` above makes the repeated prepend idempotent when shells
+# nest (tmux inside ssh, and so on).
+for brew_prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+  if [[ -x "$brew_prefix/bin/brew" ]]; then
+    eval "$("$brew_prefix/bin/brew" shellenv)"
+    break
+  fi
+done
+unset brew_prefix
+
 # Userspace scripts deployed by install.sh from the repo's bin/ directory,
-# alongside pipx/uv shims that install here by default.
+# alongside pipx/uv shims that install here by default. Prepended AFTER the
+# brew shellenv above so these win over anything with the same name in the
+# brew prefix.
 path=("$HOME/.local/bin" $path)
 
 export EDITOR="vim"

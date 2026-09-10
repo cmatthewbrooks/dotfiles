@@ -4,12 +4,7 @@
 # constantly there - but NOT in tmux panes or `ssh host cmd`. Anything that must
 # always be present belongs in .zshenv instead.
 
-# Homebrew's prefix differs by platform: /opt/homebrew on Apple Silicon,
-# /usr/local on Intel macOS, /home/linuxbrew on Linux. Probe rather than assume.
-for brew_prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
-  if [[ -x "$brew_prefix/bin/brew" ]]; then
-    eval "$("$brew_prefix/bin/brew" shellenv)"
-    break
-  fi
-done
-unset brew_prefix
+# The Homebrew shellenv probe lived here, but .zprofile only runs for LOGIN
+# shells: not tmux panes, not `exec zsh`, not `ssh host cmd`. That left brew
+# (and every brew-installed tool that rc.d guards on) missing from those
+# shells. It now lives in .zshenv, which runs for every invocation.
