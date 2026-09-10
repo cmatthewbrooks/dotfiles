@@ -1,3 +1,8 @@
-# My Environment Setup
+# dotfiles
 
-My collection of dotfiles and scripts.
+## Install
+
+Setup a new machine via:
+```
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/cmatthewbrooks/dotfiles/main/terminal-setup.sh)"
+```
