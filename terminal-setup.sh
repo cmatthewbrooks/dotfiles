@@ -132,6 +132,19 @@ EOF
     fi
   }
 
+  # Install Debian/Ubuntu packages without any interactive prompt.
+  #
+  # DEBIAN_FRONTEND stops debconf opening a dialog for package configuration.
+  # NEEDRESTART_MODE=a covers needrestart, which on Ubuntu 22.04+ interrupts an
+  # otherwise unattended apt-get with a full-screen "which services should be
+  # restarted?" menu. Both are set per-command rather than written to
+  # /etc/needrestart/needrestart.conf, so nothing about the host is permanently
+  # reconfigured to suit this script.
+  apt_install() {
+    run sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a \
+      apt-get install -y "$@"
+  }
+
   # Should this step run? Used by the --skip flag.
   should_run() {
     case " $SKIP_STEPS " in
@@ -237,7 +250,7 @@ EOF
       die "git not found. Install the Xcode Command Line Tools first: xcode-select --install"
     elif command -v apt-get >/dev/null 2>&1; then
       run sudo apt-get update -qq
-      run sudo apt-get install -y git
+      apt_install git
     else
       die "git not found and no supported package manager available to install it"
     fi
@@ -622,7 +635,7 @@ EOF
         run brew install zsh
       elif command -v apt-get >/dev/null 2>&1; then
         run sudo apt-get update -qq
-        run sudo apt-get install -y zsh
+        apt_install zsh
       else
         warn "no supported package manager found to install zsh"
       fi
