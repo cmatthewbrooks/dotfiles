@@ -440,6 +440,17 @@ EOF
       run /bin/bash -c 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
     fi
 
+    # The installer ends with "Warning: <prefix>/bin is not in your PATH",
+    # which is true when it prints it and resolves itself by the end of the run:
+    # the zprofile deployed by install.sh (a later step) probes for the brew
+    # prefix and evals `brew shellenv` in every login shell. The eval below
+    # covers this process in the meantime. Nothing to fix, but the warning is
+    # alarming enough on a first run to be worth naming.
+    if [ "$DRY_RUN" -eq 0 ] && ! command -v brew >/dev/null 2>&1; then
+      info "a PATH warning from the installer above is expected; the deployed"
+      info "zprofile puts brew on PATH for future shells"
+    fi
+
     # Homebrew's prefix is not on the default PATH (/opt/homebrew on Apple
     # Silicon, /home/linuxbrew/.linuxbrew on Linux), so a freshly installed
     # brew is unreachable by the very next command without this.
@@ -465,22 +476,26 @@ EOF
       BREWFILE="$DOTFILES_DIR/brew/Brewfile"
 
       if [ -f "$BREWFILE" ]; then
-        # --no-lock keeps brew from writing Brewfile.lock.json into the repo,
-        # which would dirty the tree and break the next run's --ff-only pull.
         # --no-upgrade keeps re-runs fast and idempotent in spirit.
+        #
+        # There was a --no-lock here to stop brew writing Brewfile.lock.json
+        # into the repo, which would dirty the tree and break the next run's
+        # --ff-only pull. Homebrew dropped both the lockfile and the flag, and
+        # now rejects it outright ("Error: invalid option: --no-lock"), so the
+        # flag is gone and the concern it guarded no longer applies.
         if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
           info "all formulae from Brewfile already installed"
           record ok "Homebrew formulae already present"
         else
           info "installing formulae from $BREWFILE"
-          run brew bundle install --file="$BREWFILE" --no-upgrade --no-lock
+          run brew bundle install --file="$BREWFILE" --no-upgrade
           record ok "Homebrew formulae installed"
         fi
 
         CASKFILE="$DOTFILES_DIR/brew/Brewfile.macos"
         if [ "$IS_MACOS" -eq 1 ] && [ "$WITH_CASKS" -eq 1 ] && [ -f "$CASKFILE" ]; then
           info "installing macOS casks from $CASKFILE"
-          run brew bundle install --file="$CASKFILE" --no-upgrade --no-lock
+          run brew bundle install --file="$CASKFILE" --no-upgrade
           record ok "macOS casks installed"
         elif [ "$IS_MACOS" -eq 1 ] && [ "$WITH_CASKS" -eq 0 ]; then
           info "skipping GUI casks (pass --casks to install them)"
