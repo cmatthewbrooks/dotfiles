@@ -488,15 +488,29 @@ EOF
           record ok "Homebrew formulae already present"
         else
           info "installing formulae from $BREWFILE"
-          run brew bundle install --file="$BREWFILE" --no-upgrade
-          record ok "Homebrew formulae installed"
+          # Do not let one bad formula end the run. Everything after this point
+          # (Claude Code, oh-my-zsh, the default shell, and the dotfiles install
+          # itself) is independent of any single package, and losing all of it
+          # to one build failure is a much worse outcome than a missing tool.
+          # The summary reports which happened either way.
+          if run brew bundle install --file="$BREWFILE" --no-upgrade; then
+            record ok "Homebrew formulae installed"
+          else
+            warn "brew bundle install failed; some formulae may be missing"
+            info "re-run this script, or: brew bundle install --file=$BREWFILE"
+            record warn "some Homebrew formulae failed to install"
+          fi
         fi
 
         CASKFILE="$DOTFILES_DIR/brew/Brewfile.macos"
         if [ "$IS_MACOS" -eq 1 ] && [ "$WITH_CASKS" -eq 1 ] && [ -f "$CASKFILE" ]; then
           info "installing macOS casks from $CASKFILE"
-          run brew bundle install --file="$CASKFILE" --no-upgrade
-          record ok "macOS casks installed"
+          if run brew bundle install --file="$CASKFILE" --no-upgrade; then
+            record ok "macOS casks installed"
+          else
+            warn "brew bundle install failed for casks; some apps may be missing"
+            record warn "some macOS casks failed to install"
+          fi
         elif [ "$IS_MACOS" -eq 1 ] && [ "$WITH_CASKS" -eq 0 ]; then
           info "skipping GUI casks (pass --casks to install them)"
           record skip "macOS casks (use --casks)"
