@@ -144,6 +144,16 @@ EOF
     return 0
   }
 
+  # Same test with no output and no summary entry, for asking about a step from
+  # outside it. Using should_run here would print a stray "skipping" line and
+  # record a duplicate skip in the summary.
+  should_run_quiet() {
+    case " $SKIP_STEPS " in
+      *" $1 "*) return 1 ;;
+    esac
+    return 0
+  }
+
   #######################################
   # Summary report
   #
@@ -242,6 +252,40 @@ EOF
     info "Run: xcode-select --install"
     info "Then re-run this script once it finishes."
     die "Xcode Command Line Tools are required before Homebrew can be installed"
+  fi
+
+  # Prime sudo up front.
+  #
+  # The Homebrew installer needs root to create /home/linuxbrew/.linuxbrew, and
+  # the apt-get calls above and below need it too. Because we export
+  # NONINTERACTIVE=1 for the brew step, the installer will NOT prompt for a
+  # password itself; it checks for an already-valid sudo credential and aborts
+  # with "Insufficient permissions to install Homebrew" if there is none. So we
+  # ask here, at a point in the run where a password prompt is expected, and let
+  # the cached credential carry the rest of the run.
+  #
+  # Only prompt when root is actually going to be needed: a macOS host whose brew
+  # prefix is already owned by the user, or a run with --skip brew, should not be
+  # asked for a password it will never spend.
+  needs_sudo=0
+  if [ "$IS_MACOS" -eq 0 ] && should_run_quiet brew && ! command -v brew >/dev/null 2>&1; then
+    needs_sudo=1
+  fi
+
+  if [ "$needs_sudo" -eq 1 ] && [ "$DRY_RUN" -eq 0 ]; then
+    if sudo -n true 2>/dev/null; then
+      ok "sudo already available"
+    elif [ ! -t 0 ]; then
+      # No terminal to prompt on. Piping this script into bash rather than using
+      # the documented bash -c "$(curl ...)" form lands here.
+      warn "sudo password needed but stdin is not a terminal"
+      info 'Re-run with: bash -c "$(curl -fsSL <script-url>)"'
+      die "cannot prompt for sudo password"
+    else
+      info "Homebrew needs root to create its prefix; caching sudo credentials"
+      sudo -v || die "sudo authentication failed"
+      ok "sudo credentials cached"
+    fi
   fi
 
   record ok "prerequisites checked"
@@ -374,9 +418,13 @@ EOF
   if should_run brew; then
     step "Checking Homebrew"
 
-    # Quieter, faster, and non-blocking. NONINTERACTIVE also stops the official
-    # installer waiting on "Press RETURN", which cannot be answered when stdin
-    # is the script itself under `curl | bash`.
+    # Quieter and faster. NONINTERACTIVE also stops the official installer
+    # waiting on "Press RETURN" to confirm the install plan.
+    #
+    # The tradeoff: NONINTERACTIVE also stops the installer prompting for a sudo
+    # password when it needs root for its prefix. It expects an already-cached
+    # credential and aborts with "Insufficient permissions to install Homebrew"
+    # without one. The prerequisites step primes that credential with `sudo -v`.
     export NONINTERACTIVE=1
     export HOMEBREW_NO_ANALYTICS=1
     export HOMEBREW_NO_ENV_HINTS=1
