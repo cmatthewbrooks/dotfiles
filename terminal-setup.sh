@@ -660,7 +660,12 @@ EOF
         fi
         if run chsh -s "$ZSH_PATH"; then
           record ok "default shell set to zsh"
-          add_next_step "Open a new terminal (or run: exec zsh) to pick up the new shell"
+          # Spell out the full path. zsh usually comes from the Brewfile, so it
+          # lives under the brew prefix and is NOT on the PATH of the shell that
+          # launched this script: a bare `exec zsh` there fails with
+          # "zsh: not found". A new login shell is fine either way, since chsh
+          # records this same absolute path.
+          add_next_step "Open a new terminal (or run: exec $ZSH_PATH) to pick up the new shell"
         else
           warn "chsh failed; run manually: chsh -s $ZSH_PATH"
           record warn "chsh failed"
