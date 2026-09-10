@@ -1,0 +1,11 @@
+# Written by `brew bundle` in older Homebrew versions. Current releases dropped
+# the lockfile, but an older brew on some host would dirty the tree here and
+# make the next run's `git pull --ff-only` fail.
+brew/Brewfile.lock.json
+
+# macOS Finder metadata, created by merely opening a directory.
+.DS_Store
+
+# Editor swap files.
+*.swp
+*~
