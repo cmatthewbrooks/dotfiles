@@ -1,0 +1,85 @@
+set number
+set linebreak
+set showbreak=+++
+"set textwidth=100
+set showmatch
+set visualbell
+
+set hlsearch
+set smartcase
+set ignorecase
+set incsearch
+
+set autoindent
+set expandtab
+set shiftwidth=4
+set smarttab
+set softtabstop=4
+
+set ruler
+
+set undolevels=1000
+set backspace=indent,eol,start
+
+" Use semi-colon to toggle highlights
+" when searching
+nnoremap ;h :set invhlsearch<CR>
+
+nnoremap ;f <C-f>
+nnoremap ;b <C-b>
+nnoremap ;d <C-d>
+nnoremap ;u <C-u>
+
+inoremap kj <Esc>
+
+vmap <C-x> :!pbcopy<CR>
+vmap <C-c> :w !pbcopy<CR><CR>
+
+syntax on
+
+" Consider all .yar/.yara files to be YARA files.
+autocmd BufNewFile,BufRead *.yar,*.yara setlocal filetype=yara
+
+function! PydocModule()
+ let cur_line = line('.')
+ let num_spaces = indent('.')
+ let spaces = repeat(' ',num_spaces)
+ let lines = [ spaces."",
+             \ spaces."Example:",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."Attributes:",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."Todo:",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."\"\"\"" ]
+ call append(cur_line,lines)
+ call setline(cur_line, "\"\"\"")
+endfunction
+
+function! PydocFunction()
+ let cur_line = line('.')
+ let num_spaces = indent('.')
+ let spaces = repeat(' ',num_spaces)
+ let lines = [ spaces."",
+             \ spaces."    Args:",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."    Returns:",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."    Raises:",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."",
+             \ spaces."    \"\"\"" ]
+ call append(cur_line,lines)
+ call setline(cur_line, "    \"\"\"")
+endfunction

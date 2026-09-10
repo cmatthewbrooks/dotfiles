@@ -1,0 +1,13 @@
+# ~/.zshenv - the only zsh config file that must live in $HOME.
+#
+# zsh always reads $HOME/.zshenv first, for EVERY invocation. Its sole job here
+# is to point zsh at the real config directory; everything else lives there.
+# Keep this file free of output: it runs for scp/rsync/sftp too, and stray
+# bytes on stdout break those protocols.
+
+export ZDOTDIR="$HOME/.config/zsh"
+
+# Source the real zshenv. zsh does NOT re-read .zshenv from $ZDOTDIR after the
+# variable is set - only the later files (.zprofile, .zshrc) come from there -
+# so env that non-interactive shells need has to be pulled in explicitly.
+[[ -f "$ZDOTDIR/.zshenv" ]] && source "$ZDOTDIR/.zshenv"

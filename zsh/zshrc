@@ -1,0 +1,17 @@
+# Interactive shell configuration.
+#
+# This file is just a loader: the real config lives in rc.d/ as numbered
+# fragments, sourced in filename order. The numeric prefixes matter -
+# oh-my-zsh (10) must load before the aliases (20) that override its plugins.
+#
+# Add a new fragment by dropping a *.zsh file into rc.d/; no edit here needed.
+
+# (N) is the nullglob qualifier: an empty or missing rc.d/ is not an error.
+for rc_fragment in "${ZDOTDIR:-$HOME}"/rc.d/*.zsh(N); do
+  source "$rc_fragment"
+done
+unset rc_fragment
+
+# Machine-local overrides, deliberately untracked - API keys, work-specific
+# paths, per-host tweaks that should never reach the repo.
+[[ -f "${ZDOTDIR:-$HOME}/zshrc.local" ]] && source "${ZDOTDIR:-$HOME}/zshrc.local"

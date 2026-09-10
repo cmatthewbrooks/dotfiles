@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.tox/
+dist/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# AI/LLMs
+.aider*
+CONVENTIONS.md
+
+# Shell
+# Machine-local zsh overrides sourced by zshrc: host-specific paths, tokens.
+zshrc.local
+zshenv.local
+gitconfig.local

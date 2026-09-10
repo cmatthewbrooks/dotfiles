@@ -1,0 +1,15 @@
+# Login-shell setup, sourced once per login before .zshrc.
+#
+# macOS note: Terminal.app starts every new tab as a login shell, so this runs
+# constantly there - but NOT in tmux panes or `ssh host cmd`. Anything that must
+# always be present belongs in .zshenv instead.
+
+# Homebrew's prefix differs by platform: /opt/homebrew on Apple Silicon,
+# /usr/local on Intel macOS, /home/linuxbrew on Linux. Probe rather than assume.
+for brew_prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+  if [[ -x "$brew_prefix/bin/brew" ]]; then
+    eval "$("$brew_prefix/bin/brew" shellenv)"
+    break
+  fi
+done
+unset brew_prefix

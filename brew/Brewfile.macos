@@ -1,0 +1,49 @@
+#######################################
+# macOS GUI applications
+#
+# Only installed when terminal-setup.sh is run with --casks, since this is a
+# large download and is rarely wanted on a re-run.
+
+# specify a directory to install
+cask_args appdir: "/Applications"
+
+## Chat and Communications
+cask "discord"
+cask "keybase"
+cask "signal"
+cask "slack"
+cask "zoom"
+cask "telegram"
+cask "wire"
+cask "whatsapp"
+
+## Development
+cask "dash"
+cask "docker"
+cask "iterm2"
+cask "macdown"
+cask "visual-studio-code"
+cask "bbedit"
+
+## Productivity
+cask "moom"
+
+## Security
+cask "1password"
+cask "wireshark-app"
+cask "crescendo"
+
+## Drawing and Graphics
+cask "gimp"
+cask "drawio"
+
+## Entertainment
+cask "spotify"
+cask "cockatrice"
+
+## Other
+cask "caffeine"
+cask "dropbox"
+cask "firefox"
+cask "hex-fiend"
+cask "standard-notes"

@@ -1,0 +1,3 @@
+settings set target.x86-disassembly-flavor intel
+
+command script import  ~/github/lldbinit/lldbinit.py"

@@ -1,0 +1,42 @@
+# Good ideas here:
+# https://gist.github.com/pksunkara/988716
+[user]
+	name = Matt B
+	email = 3974104+cmatthewbrooks@users.noreply.github.com
+[core]
+	excludesfile = ~/.gitignore
+	editor = vim
+	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	#pager = delta
+[pull]
+        rebase = false
+[alias]
+	hist = log --pretty=format:'%Cgreen%h%Creset %ai | %s %Cblue[%an] %Cred%d' --date=short -n 10 --color
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit --all -n 10 --color
+	mylog = log --pretty=format:'%h %s [%an]' --graph --color
+[color]
+	ui = auto
+[color "branch"]
+	current = yellow bold
+	local = green bold
+	remote = cyan bold
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "status"]
+	added = green bold
+	changed = yellow bold
+	untracked = red bold
+[diff]
+	tool = batdiff
+[difftool]
+	prompt = false
+[delta]
+	features = line-numbers decorations
+	line-numbers = true
+        theme = OneHalfDark
+[include]
+        path = ~/.gitconfig.local

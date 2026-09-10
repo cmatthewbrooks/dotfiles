@@ -1,0 +1,114 @@
+CustomIDAMemo
+{
+    qproperty-line-fg-default: #a9a9a9;
+    qproperty-line-fg-regular-comment: #68cf64;
+    qproperty-line-fg-repeatable-comment: #40c0f0;
+    qproperty-line-fg-automatic-comment: #40c0f0;
+    qproperty-line-fg-insn: #40c0f0;
+    qproperty-line-fg-dummy-data-name: #40c0f0;
+    qproperty-line-fg-regular-data-name: #40c0f0;
+    qproperty-line-fg-demangled-name: #40c0f0;
+    qproperty-line-fg-punctuation: #a9a9a9;
+    qproperty-line-fg-charlit-in-insn: #40c0f0;
+    qproperty-line-fg-strlit-in-insn: #40c0f0;
+    qproperty-line-fg-numlit-in-insn: #40c0f0;
+    qproperty-line-fg-void-opnd: #a9a9a9;
+    qproperty-line-fg-code-xref: #40c0f0;
+    qproperty-line-fg-data-xref: #40c0f0;
+    qproperty-line-fg-code-xref-to-tail: #40c0f0;
+    qproperty-line-fg-data-xref-to-tail: #40c0f0;
+    qproperty-line-fg-error: #050deb;
+    qproperty-line-fg-line-prefix: #a9a9a9;
+    qproperty-line-fg-opcode-byte: #a9a9a9;
+    qproperty-line-fg-extra-line: #a9a9a9;
+    qproperty-line-fg-alt-opnd: #a9a9a9;
+    qproperty-line-fg-hidden: #a9a9a9;
+    qproperty-line-fg-libfunc: #ed5eec;
+    qproperty-line-fg-locvar: #40c0f0;
+    qproperty-line-fg-dummy-code-name: #40c0f0;
+    qproperty-line-fg-asm-directive: #a9a9a9;
+    qproperty-line-fg-macro: #a9a9a9;
+    qproperty-line-fg-strlit-in-data: #a9a9a9;
+    qproperty-line-fg-charlit-in-data: #a9a9a9;
+    qproperty-line-fg-numlit-in-data: #a9a9a9;
+    qproperty-line-fg-keyword: #a9a9a9;
+    qproperty-line-fg-register-name: #a9a9a9;
+    qproperty-line-fg-import-name: #ed5eec;
+    qproperty-line-fg-segment-name: #a9a9a9;
+    qproperty-line-fg-dummy-unknown-name: #a9a9a9;
+    qproperty-line-fg-code-name: #40c0f0;
+    qproperty-line-fg-unknown-name: #a9a9a9;
+    qproperty-line-fg-collapsed-line: #a9a9a9;
+    qproperty-line-bg-default: #000000;
+    qproperty-line-bg-selected: #a9a9a9;
+    qproperty-line-pfx-libfunc: #a9a9a9;
+    qproperty-line-pfx-func: #a9a9a9;
+    qproperty-line-pfx-insn: #a9a9a9;
+    qproperty-line-pfx-data: #a9a9a9;
+    qproperty-line-pfx-unexplored: #a9a9a9;
+    qproperty-line-pfx-extern: #a9a9a9;
+    qproperty-line-pfx-current-item: #a9a9a9;
+    qproperty-line-pfx-current-line: #a9a9a9;
+    qproperty-line-pfx-lumina: #050deb;
+    qproperty-line-bg-dbg-ip: #60d0ff;
+    qproperty-line-bg-dbg-ip-bpt-enabled: #a0a0ff;
+    qproperty-line-bg-dbg-ip-bpt-disabled: #208040;
+    qproperty-line-bg-dbg: #ccffff;
+    qproperty-line-bg-dbg-bpt-enabled: #760000;
+    qproperty-line-bg-dbg-bpt-disabled: #00ff00;
+    qproperty-line-bg-dbg-ip-bpt-unavailable: #804000;
+    qproperty-line-bg-dbg-bpt-unavailable: #ff8000;
+    qproperty-graph-bg-top: #b2b2b2;
+    qproperty-graph-bg-bottom: #b2b2b2;
+    qproperty-graph-node-title-normal: #f5f5f5;
+    qproperty-graph-node-title-selected: #aa9f98;
+    qproperty-graph-node-title-current: #5e5854;
+    qproperty-graph-node-frame-group: #ffff00;
+    qproperty-graph-node-shadow: #242424;
+    qproperty-graph-node-high1: #003900;
+    qproperty-graph-node-high2: #6d0000;
+    qproperty-graph-node-foreign: #ff0000;
+    qproperty-graph-edge-normal: #0043cb;
+    qproperty-graph-edge-yes: #009100;
+    qproperty-graph-edge-no: #bc0000;
+    qproperty-graph-edge-high: #aaaaff;
+    qproperty-graph-edge-current: #c68e00;
+    qproperty-line-fg-patched-bytes: #804040;
+    qproperty-line-fg-unsaved-changes: #ff8000;
+    qproperty-line-bg-highlight: #85dcf7;
+    qproperty-line-bg-hint: #808080;
+}
+MainMsgList
+{
+    color: #212121;
+    background-color: #d4d4d4;
+}
+TCpuRegs
+{
+    qproperty-register-defined: #000000;
+    qproperty-register-changed: #0000ff;
+    qproperty-register-edited: #800080;
+    qproperty-register-unavailable: #808080;
+}
+TextArrows
+{
+    qproperty-jump-in-function: #6c4634;
+    qproperty-jump-external-to-function: #00dede;
+    qproperty-jump-under-cursor: #ffaa00;
+    qproperty-jump-target: #008000;
+    qproperty-register-target: #4040ff;
+}
+navband_t
+{
+    qproperty-lib-function: #00aaff;
+    qproperty-function: #ffaa00;
+    qproperty-code: #800000;
+    qproperty-data: #ebebb9;
+    qproperty-undefined: #787800;
+    qproperty-extern: #ff00ff;
+    qproperty-error: #ca0000;
+    qproperty-gap: #4a4a4a;
+    qproperty-cursor: #80ff00;
+    qproperty-auto-analysis-cursor: #ff8000;
+    qproperty-lumina-function: #32cd32;
+}

@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+
+import os
+import logging
+import argparse
+import subprocess
+
+# The trailing space is required
+IDA_APP_PATH = 'IDA Pro ' 
+
+# Right now, just assume 64-bit
+#
+# TODO: Open the correct IDA version depending on the file being
+# 32 or 64 bit
+APP_BUNDLE_64 = 'ida64.app/Contents/MacOS/ida64'
+
+
+class IdaHelper():
+
+    def __init__(self):
+        
+        self.recent_version = self._find_most_recent_ida_version()
+        self.bin_path = self._get_bin_path()
+
+    def _find_most_recent_ida_version(self):
+
+        versions = []
+        highest_version = None
+
+        for app in os.listdir('/Applications'):
+            if app.startswith(IDA_APP_PATH):
+                version = float(app[len(IDA_APP_PATH):])
+                if not highest_version:
+                    highest_version = version
+                elif version > highest_version:
+                    highest_version = version
+
+        return highest_version
+
+    def _get_bin_path(self):
+        
+        return (
+            f"/Applications/{IDA_APP_PATH}{self.recent_version}"
+            f"/{APP_BUNDLE_64}"
+        )
+
+def main(target):
+
+    if not os.path.isfile(target):
+        raise FileNotFoundError(f"{target} is not a valid file")
+
+    ida = IdaHelper()
+    bin_path = ida.bin_path
+
+    # TODO: Handle this correctly so IDA opens and does not need to write
+    # anything to stdout/stderr. Currently, if I try to handle, then IDA
+    # won't open correctly.
+    p1 = subprocess.Popen(
+        [bin_path, target], 
+        stdout = subprocess.DEVNULL,
+        stderr = subprocess.DEVNULL
+    )
+
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+
+    log_level = parser.add_mutually_exclusive_group()
+
+    log_level.add_argument(
+        '-v',
+        action = 'store_true',
+        help = 'Verbose - logging level at INFO'
+    )
+
+    log_level.add_argument(
+        '-vv',
+        action = 'store_true',
+        help = 'Very Verbose - logging level at DEBUG'
+    )
+
+    parser.add_argument(
+        'target',
+        help = 'The target file to open in IDA'
+    )
+
+    args = parser.parse_args()
+
+
+    logger = logging.getLogger(__name__)
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter('%(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+
+    if args.v:
+        logger.setLevel(logging.INFO)
+    elif args.vv:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.WARNING)
+
+    logger.debug(args)
+
+    main(args.target)

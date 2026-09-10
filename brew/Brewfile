@@ -1,0 +1,40 @@
+#######################################
+# Shared CLI formulae
+#
+# Safe on both macOS and Linuxbrew. GUI applications live in Brewfile.macos and
+# are only installed when terminal-setup.sh is run with --casks.
+
+## Development
+brew "vim"
+brew "tmux"
+brew "rust"
+brew "go"
+brew "uv"
+brew "pipx"
+brew "ruff"
+brew "docker"
+brew "docker-compose"
+brew "colima"
+brew "zsh"
+brew "zsh-syntax-highlighting"
+
+## Command Line Utilities
+brew "ascii"
+brew "colordiff"
+brew "fzf"
+brew "gron"
+brew "jq"
+brew "tree"
+brew "ripgrep"
+brew "zoxide"
+
+## Infrastructure
+brew "gh"
+brew "awscli"
+brew "aws-cdk"
+brew "doctl"
+
+## Random Tools
+brew "ssdeep"
+brew "yara"
+brew "yara-x"

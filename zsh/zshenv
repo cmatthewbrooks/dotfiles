@@ -1,0 +1,25 @@
+# Environment for EVERY zsh invocation: interactive, login, scripts, cron, and
+# `ssh host cmd`. Anything a non-interactive tool needs to see belongs here
+# rather than in .zshrc, which only interactive shells read.
+#
+# No output, no interactive-only assumptions - see the note in zshenv-bootstrap.
+
+# Keep PATH/FPATH entries unique. zsh ties the `path` array to $PATH, so this
+# makes re-sourcing (tmux, nested shells) idempotent without any manual guard.
+typeset -U path fpath
+
+# Userspace scripts deployed by install.sh from the repo's bin/ directory,
+# alongside pipx/uv shims that install here by default.
+path=("$HOME/.local/bin" $path)
+
+export EDITOR="vim"
+export VISUAL="$EDITOR"
+
+# Suppress .pyc/__pycache__ writes. Set here rather than in .zshrc so it also
+# applies to `ssh host 'python ...'`, cron jobs, and editor subshells.
+export PYTHONDONTWRITEBYTECODE=1
+
+# Host-specific env that should not be committed - YARA_AUTHOR, tokens, work
+# paths - goes in this untracked file. Sourced here rather than from .zshrc so
+# GUI apps and non-interactive shells see it too.
+[[ -f "${ZDOTDIR:-$HOME}/zshenv.local" ]] && source "${ZDOTDIR:-$HOME}/zshenv.local"
