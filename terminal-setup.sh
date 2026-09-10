@@ -627,11 +627,26 @@ EOF
       # $SHELL is the inherited env var, not the authoritative login shell, so
       # comparing against it makes chsh re-run on every invocation. Read the
       # real value and fall back through progressively weaker sources.
-      current_shell="$(dscl . -read "$HOME" UserShell 2>/dev/null | awk '{print $2}')"
-      if [ -z "$current_shell" ]; then
-        current_shell="$(getent passwd "$(id -un)" 2>/dev/null | cut -d: -f7)"
+      #
+      # Each lookup is guarded twice. The command-exists check keeps us off the
+      # tool that belongs to the other platform (dscl is macOS-only, getent is
+      # not on macOS), and the `|| true` catches the rest: under `set -o
+      # pipefail` a failure anywhere in the pipeline becomes the status of the
+      # whole substitution, and `set -e` then aborts the run. 2>/dev/null hides
+      # the message but NOT the exit status, so it is not enough on its own.
+      current_shell=""
+
+      if command -v dscl >/dev/null 2>&1; then
+        current_shell="$(dscl . -read "$HOME" UserShell 2>/dev/null | awk '{print $2}' || true)"
       fi
-      [ -n "$current_shell" ] || current_shell="$SHELL"
+
+      if [ -z "$current_shell" ] && command -v getent >/dev/null 2>&1; then
+        current_shell="$(getent passwd "$(id -un)" 2>/dev/null | cut -d: -f7 || true)"
+      fi
+
+      # Last resort: the inherited env var. Wrong after a chsh in the same
+      # session, but better than an empty comparison.
+      [ -n "$current_shell" ] || current_shell="${SHELL:-}"
 
       if [ "$current_shell" = "$ZSH_PATH" ]; then
         info "zsh is already the login shell"
