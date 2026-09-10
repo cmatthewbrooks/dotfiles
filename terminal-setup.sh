@@ -453,15 +453,19 @@ EOF
       run /bin/bash -c 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
     fi
 
-    # The installer ends with "Warning: <prefix>/bin is not in your PATH",
-    # which is true when it prints it and resolves itself by the end of the run:
-    # the zprofile deployed by install.sh (a later step) probes for the brew
-    # prefix and evals `brew shellenv` in every login shell. The eval below
-    # covers this process in the meantime. Nothing to fix, but the warning is
-    # alarming enough on a first run to be worth naming.
+    # The installer ends with "Warning: <prefix>/bin is not in your PATH".
+    # That is true when printed: install.sh has not run yet, so the zsh config
+    # that puts the brew prefix on PATH is not deployed. The eval below covers
+    # this process, and the zshenv deployed later covers shells started after
+    # the run.
+    #
+    # It only clears for shells started AFTER install.sh deploys that config.
+    # The shell that launched this script keeps its original PATH, so `brew`
+    # stays unavailable there until it is replaced. That is why the next-step
+    # message spells out zsh's full path rather than suggesting `exec zsh`.
     if [ "$DRY_RUN" -eq 0 ] && ! command -v brew >/dev/null 2>&1; then
       info "a PATH warning from the installer above is expected; the deployed"
-      info "zprofile puts brew on PATH for future shells"
+      info "zshenv puts brew on PATH for shells started after this run"
     fi
 
     # Homebrew's prefix is not on the default PATH (/opt/homebrew on Apple
