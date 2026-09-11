@@ -33,6 +33,7 @@ brew "gh"
 brew "awscli"
 brew "aws-cdk"
 brew "doctl"
+brew "mosh"
 
 ## Random Tools
 brew "ssdeep"
