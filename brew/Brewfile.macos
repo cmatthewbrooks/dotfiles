@@ -32,6 +32,7 @@ cask "moom"
 cask "1password"
 cask "wireshark-app"
 cask "crescendo"
+cask "tailscale-app"
 
 ## Drawing and Graphics
 cask "gimp"
