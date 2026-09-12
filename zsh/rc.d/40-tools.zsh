@@ -16,3 +16,9 @@ fi
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
 fi
+
+# tailscale: subcommand and flag completions. Not shipped as a static
+# completion file by the brew formula, so it has to be generated per-shell.
+if command -v tailscale >/dev/null 2>&1; then
+  source <(tailscale completion zsh)
+fi
