@@ -22,6 +22,7 @@ venv.bak/
 # AI/LLMs
 .aider*
 CONVENTIONS.md
+.claude/worktrees/
 
 # Shell
 # Machine-local zsh overrides sourced by zshrc: host-specific paths, tokens.
