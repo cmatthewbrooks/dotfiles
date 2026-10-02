@@ -9,6 +9,7 @@ packages=(
     "rich-cli"
     "tldr"
     "yt-dlp"
+    "webserp"
 )
 
 echo "[+] Installing/Updating pipx packages"
