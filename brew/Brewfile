@@ -27,6 +27,8 @@ brew "jq"
 brew "tree"
 brew "ripgrep"
 brew "zoxide"
+brew "lynx"
+brew "ddgr"
 
 ## Infrastructure
 brew "gh"
